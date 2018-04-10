@@ -56,4 +56,13 @@ public class Contador extends AppCompatActivity {
         super.onRestoreInstanceState(datos);
         contador=datos.getInt("contadorActual");
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed(); // comentando esto se deshabilitara el boton de ir atras.
+        //Bundle bundle = new Bundle();
+        //bundle.putInt("contadorActual", contador);
+        //onSaveInstanceState(bundle);
+        //Toast.makeText(getApplicationContext(),"onBackPressed"+contador,Toast.LENGTH_LONG).show();
+    }
 }

@@ -35,6 +35,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
             Toast.makeText(getApplicationContext(),"Hola contador"+contador,Toast.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //recibir datos
+        Bundle recibo = getIntent().getExtras();
+        if(recibo!=null){
+            contador =recibo.getInt("contadorActual");
+            Toast.makeText(getApplicationContext(),"Hola2 contador"+contador,Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
     public void Volver(View i){
         Intent volver = new Intent(Home.this,MainActivity.class);
         volver.addFlags(volver.FLAG_ACTIVITY_CLEAR_TASK | volver.FLAG_ACTIVITY_CLEAR_TOP);

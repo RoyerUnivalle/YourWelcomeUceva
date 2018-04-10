@@ -1,8 +1,11 @@
 package com.example.yourwelcome;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +18,7 @@ public class Servicio extends AppCompatActivity {
 
     TextView pintar;
     int entero=0;
+    int flag=0;
 
     Pintar obj;
 
@@ -37,31 +41,69 @@ public class Servicio extends AppCompatActivity {
         startService(volver);
     }
     public void Pintar1(View r){
-        for (int i=0;i<30;i++){
-            try {
-                pintar.setBackgroundColor(Color.rgb(aleatorio(),aleatorio(),aleatorio()));
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        //AlertDialog dialgo= new AlertDialog();
+        AlertDialog alertDialog = new AlertDialog.Builder(Servicio.this).create();
+        alertDialog.setTitle("Información");
+        alertDialog.setMessage("Desea ejecutar el ejemplo en el mismo proceso");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Aceptar",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i=0;i<30;i++){
+                            try {
+                                pintar.setBackgroundColor(Color.rgb(aleatorio(),aleatorio(),aleatorio()));
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
-        }
-
+        });
+        alertDialog.show();
     }
     public void Pintar2(View r){
-        obj = new Pintar();
-        obj.execute();
+        //
+        if(flag==1){
+            obj.cancel(true);
+            obj = new Pintar();
+            obj.execute();
+            Toast.makeText(this,""+obj.getStatus().toString(),Toast.LENGTH_SHORT).show();
+        }else{
+            obj = new Pintar();
+            obj.execute();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        obj.cancel(true);
     }
 
     //<Params, Progress, Result>
     public class Pintar extends AsyncTask<Void,Integer,Void>{
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            flag=1;
+        }
+        @Override
         protected Void doInBackground(Void... params) {
-            for (int i=0;i<30;i++){
-                try {
-                    publishProgress(i);// LLAMA AL METODO onProgressUpdate, QUIEN ES EL QUE TIENEN ACEESO A LA GUI
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            for (int i=0;i<=30;i++){
+                if(obj.isCancelled()){
+                   break;
+                }else{
+                    try {
+                        publishProgress(i);// LLAMA AL METODO onProgressUpdate, QUIEN ES EL QUE TIENEN ACEESO A LA GUI
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             return null;
@@ -71,9 +113,15 @@ public class Servicio extends AppCompatActivity {
             super.onProgressUpdate(datos);
             pintar.setBackgroundColor(Color.rgb(aleatorio(),aleatorio(),aleatorio()));
             pintar.setText(""+datos[0]);
-            Toast.makeText(getApplicationContext(),"Hola asyntask"+datos[0],Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Hola asyntask"+datos[0],Toast.LENGTH_SHORT).show();
         }
 
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            //obj=null;
+            flag=0;
+        }
     }
 
     public int aleatorio(){
