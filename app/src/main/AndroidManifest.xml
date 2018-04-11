@@ -23,7 +23,9 @@
         <service
             android:name=".Servicios.Alerta"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".FragActivity"></activity>
     </application>
 
 </manifest>

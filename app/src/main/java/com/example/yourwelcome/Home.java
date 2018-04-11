@@ -47,7 +47,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-
+    public void IrFrag(View k){
+        Intent volver = new Intent(Home.this,FragActivity.class);
+        volver.addFlags(volver.FLAG_ACTIVITY_CLEAR_TASK | volver.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(volver);
+    }
 
     public void Volver(View i){
         Intent volver = new Intent(Home.this,MainActivity.class);
