@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class FragActivity extends AppCompatActivity implements FragMenu.OnFragmentInteractionListener, FragSPA.OnFragmentInteractionListener, View.OnClickListener {
+public class FragActivity extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener, View.OnClickListener {
 
     Button btn1,btn2,btn3;
 
@@ -25,8 +25,8 @@ public class FragActivity extends AppCompatActivity implements FragMenu.OnFragme
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this); // tiene que implementarse View.OnClickListener
 
-        Footer fr3 = new Footer();
-        getSupportFragmentManager().beginTransaction().add(R.id.contenedor,fr3);
+        /*Footer fr3 = new Footer();
+        getSupportFragmentManager().beginTransaction().add(R.id.contenedor,fr3);*/
     }
     @Override
     public void onFragmentInteraction(Uri uri) {}
@@ -35,10 +35,10 @@ public class FragActivity extends AppCompatActivity implements FragMenu.OnFragme
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button6:
-                FragMenu fr1 = new FragMenu();
+                /*FragMenu fr1 = new FragMenu();
                 FragmentTransaction transtion1 = getSupportFragmentManager().beginTransaction();
                 transtion1.replace(R.id.contenedor,fr1);
-                transtion1.commit();
+                transtion1.commit();*/
                 break;
             case R.id.button5:
                 FragSPA fr2 = new FragSPA();

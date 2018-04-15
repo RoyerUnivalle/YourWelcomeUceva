@@ -25,7 +25,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".FragActivity"></activity>
+        <activity android:name=".FragActivity" />
+        <activity android:name=".HomeApp"></activity>
     </application>
 
 </manifest>

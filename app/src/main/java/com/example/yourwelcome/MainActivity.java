@@ -21,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
         //Pasar a otra actividad
         startActivity(ir);
     }
+    public void iniciarFrag(View g){
+        //Nueva intención
+        Intent ir = new Intent(MainActivity.this,HomeApp.class);
+        ir.addFlags(ir.FLAG_ACTIVITY_CLEAR_TASK | ir.FLAG_ACTIVITY_CLEAR_TOP);
+        //Pasar a otra actividad
+        startActivity(ir);
+    }
 
     @Override
     protected void onDestroy() {

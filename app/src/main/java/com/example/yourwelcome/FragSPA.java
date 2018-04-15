@@ -4,9 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 /**
@@ -45,7 +50,7 @@ public class FragSPA extends Fragment {
     public static FragSPA newInstance(String param1, String param2) {
         FragSPA fragment = new FragSPA();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM1, param1);//parametro recibido desde la actividad que invocar
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -55,16 +60,22 @@ public class FragSPA extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            //se recibe parametrso recarga las variables
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        //para usar menus
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_frag_s, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate( R.layout.fragment_frag_s, container, false);
+
+        // TODO Adjust layout params of inflated view here
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +115,28 @@ public class FragSPA extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.frag_menu, menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean showMessage = false;
+        String message="";
+        // handle item selection
+        switch (item.getItemId()) {
+            case R.id.frag_item_one:
+                message="Hola fragment item";
+                showMessage=true;
+                //return true;
+        }
+        if(showMessage) {
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+            alertDialog.setMessage(message);
+            alertDialog.show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
