@@ -10,9 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.yourwelcome.Conexion.Conexion;
+
+import java.io.IOException;
 
 public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener{
 
@@ -23,6 +27,9 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
     SQLiteDatabase db;
 
 
+    EditText edNombreEstudiante;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +38,7 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         myToolbar.setTitle("Proyecto móviles");
         //myToolbar.hideOverflowMenu();
         setSupportActionBar(myToolbar);
+
     }
 
     public void mostrarDatabaseOption(){
@@ -52,6 +60,13 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         }
     }
 
+    public void ingresarEstudiante(View f){
+        //String prueba=f.getResources().getResourceEntryName(R.id.btnExecuteBD);
+        String estudiante ="insert into personas (nombre) values ('marcela');";
+        db.execSQL(estudiante);
+        Toast.makeText(this,"Estudiante creado ",Toast.LENGTH_LONG).show();
+    }
+
     public void VolverFrag(View f){
         Toast.makeText(this,"hola",Toast.LENGTH_LONG).show();
         FragmentTransaction transtionHideen=getSupportFragmentManager().beginTransaction();
@@ -62,6 +77,17 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
             fr2=null;
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            con.BD_backup();
+            Toast.makeText(this,"Base de datos copiada",Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
