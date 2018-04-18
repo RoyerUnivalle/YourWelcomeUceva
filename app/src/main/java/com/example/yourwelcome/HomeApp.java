@@ -1,5 +1,6 @@
 package com.example.yourwelcome;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,23 +12,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.yourwelcome.Conexion.Conexion;
+
 public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener{
 
     FragSPA fr2;
     FragmentManager fragmentManager;
+
+    Conexion con;
+    SQLiteDatabase db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_app);
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("");
-        myToolbar.hideOverflowMenu();
-
+        myToolbar.setTitle("Proyecto móviles");
+        //myToolbar.hideOverflowMenu();
         setSupportActionBar(myToolbar);
-
     }
 
     public void mostrarDatabaseOption(){
@@ -38,6 +41,14 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
             FragmentTransaction transtion=getSupportFragmentManager().beginTransaction();
             transtion.add(R.id.layout_frag,fr2);
             transtion.commit();
+        }
+    }
+
+    public void DatabaseCreate(View g){
+        con = new Conexion(this,"ProyectoM",null,1);
+        db = con.getWritableDatabase();
+        if(con!=null){
+            Toast.makeText(this,"Base de datos creada",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -90,8 +101,6 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
 
         }
     }
-
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {

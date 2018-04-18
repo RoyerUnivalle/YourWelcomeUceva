@@ -21,9 +21,9 @@
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_service"
-        android:title="Service"
+        android:title="Service2"
         android:icon="@drawable/service"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:layout_width="wrap_content" />
 
     <item android:id="@+id/sign_out"
