@@ -23,10 +23,6 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
     FragSPA fr2;
     FragmentManager fragmentManager;
 
-    Conexion con;
-    SQLiteDatabase db;
-
-
     EditText edNombreEstudiante;
 
 
@@ -52,20 +48,6 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         }
     }
 
-    public void DatabaseCreate(View g){
-        con = new Conexion(this,"ProyectoM",null,1);
-        db = con.getWritableDatabase();
-        if(con!=null){
-            Toast.makeText(this,"Base de datos creada",Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void ingresarEstudiante(View f){
-        //String prueba=f.getResources().getResourceEntryName(R.id.btnExecuteBD);
-        String estudiante ="insert into personas (nombre) values ('marcela');";
-        db.execSQL(estudiante);
-        Toast.makeText(this,"Estudiante creado ",Toast.LENGTH_LONG).show();
-    }
 
     public void VolverFrag(View f){
         Toast.makeText(this,"hola",Toast.LENGTH_LONG).show();
@@ -82,12 +64,12 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
+        /*try {
             con.BD_backup();
             Toast.makeText(this,"Base de datos copiada",Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override

@@ -28,7 +28,6 @@
             <Button
                 android:id="@+id/button1"
                 android:layout_gravity="left|top"
-                android:onClick="DatabaseCreate"
                 android:text="Crear" />
 
             <Button
@@ -37,32 +36,32 @@
                 android:text="Permisos" />
 
             <Button
-                android:id="@+id/btnExecuteBD"
+                android:id="@+id/btnViewOptions"
                 android:layout_gravity="left|top"
-                android:text="Ejecutar" />
+                android:text="Mostrar" />
 
             <Button
                 android:id="@+id/btnVolverGrag"
                 android:layout_gravity="left|top"
                 android:onClick="VolverFrag"
-                android:text="Volver" />
+                android:text="Volver"
+                tools:ignore="OnClick" />
 
         </GridLayout>
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:hint="Name" />
 
         <Button
             android:id="@+id/bntInsertar"
             android:layout_width="match_parent"
-            android:visibility="visible"
-            android:onClick="ingresarEstudiante"
+            android:visibility="invisible"
             android:layout_height="wrap_content"
             android:text="Guardar" />
 
