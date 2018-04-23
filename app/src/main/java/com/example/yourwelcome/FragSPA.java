@@ -1,6 +1,7 @@
 package com.example.yourwelcome;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -92,10 +93,30 @@ public class FragSPA extends Fragment {
     public void ingresarEstudiante(String personName){
         //String prueba=f.getResources().getResourceEntryName(R.id.btnExecuteBD);
         String estudiante ="insert into personas (nombre) values ('"+personName+"');";
-        db.execSQL(estudiante);
-        //¿La transacción fue exitosa?
-        edName.setText("");
-        //Toast.makeText(getContext(),"Estudiante creado ",Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"sdf sfdsd"+personName.length(),Toast.LENGTH_SHORT).show();
+        if(personName.length()<=0){
+            AlertDialog dialogo = new AlertDialog.Builder(getActivity()).create();
+            dialogo.setTitle("Advertencia");
+            dialogo.setButton(DialogInterface.BUTTON_POSITIVE, "Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getContext(),"Boton aceptar",Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            dialogo.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialogo.setMessage("Por favor diligencie el campo nombre");
+            dialogo.show();
+        }else{
+            db.execSQL(estudiante);
+            edName.setText("");
+            Toast.makeText(getContext(),"Estudiante creado ",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
