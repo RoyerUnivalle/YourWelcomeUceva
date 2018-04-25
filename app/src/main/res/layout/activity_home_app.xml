@@ -27,7 +27,13 @@
                 android:layout_width="match_parent"
                 android:id="@+id/layout_frag"
                 android:layout_weight="4"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
             </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:id="@+id/layout_personasView"
+            android:layout_weight="4"
+            android:layout_height="wrap_content">
+        </FrameLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

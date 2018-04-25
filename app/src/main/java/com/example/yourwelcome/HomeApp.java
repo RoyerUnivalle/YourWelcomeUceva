@@ -18,7 +18,7 @@ import com.example.yourwelcome.Conexion.Conexion;
 
 import java.io.IOException;
 
-public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener{
+public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener, PersonasView.OnFragmentInteractionListener{
 
     FragSPA fr2;
     FragmentManager fragmentManager;

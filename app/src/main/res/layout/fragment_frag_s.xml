@@ -26,14 +26,14 @@
             tools:context=".GridXMLActivity">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/btnSearch"
                 android:layout_gravity="left|top"
-                android:text="Crear" />
+                android:text="Consultar" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnLlamadoA"
                 android:layout_gravity="left|top"
-                android:text="Permisos" />
+                android:text="Llamado activity" />
 
             <Button
                 android:id="@+id/btnViewOptions"

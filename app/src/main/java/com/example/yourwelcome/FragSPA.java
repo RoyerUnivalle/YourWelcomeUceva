@@ -2,10 +2,13 @@ package com.example.yourwelcome;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +23,8 @@ import android.widget.Toast;
 
 import com.example.yourwelcome.Conexion.Conexion;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +34,7 @@ import com.example.yourwelcome.Conexion.Conexion;
  * Use the {@link FragSPA#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragSPA extends Fragment {
+public class FragSPA extends Fragment implements  View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,10 +45,12 @@ public class FragSPA extends Fragment {
     private String mParam2;
 
     EditText edName;
-    Button btnViewOptions,btnInsert;
+    Button btnViewOptions,btnInsert,btnSearch,btnIrA;
 
     Conexion con;
     SQLiteDatabase db;
+
+    PersonasView persona;
 
     private OnFragmentInteractionListener mListener;
 
@@ -90,6 +97,36 @@ public class FragSPA extends Fragment {
         }
     }
 
+    //https://stackoverflow.com/questions/9280692/android-sqlite-select-query
+    //https://es.stackoverflow.com/questions/65655/cambiar-de-un-fragment-a-otro-por-medio-de-un-boton
+    //http://gpmess.com/blog/2014/04/16/buenas-practicas-usando-fragments-en-android/
+    public void seleccionarEstudiantes(){
+        Cursor c = db.rawQuery("SELECT * FROM personas ", null);
+        //String resultado= "";
+        ArrayList<String> personas =new ArrayList<String>();
+        if (c.moveToFirst()){
+            do {
+                // Passing values
+                personas.add(c.getString(1));
+                //resultado = resultado+" "+c.getString(1)+"\n";
+                // Do something Here with values
+            } while(c.moveToNext());
+        }
+        c.close();
+        //db.close();
+        //Toast.makeText(getContext(),">>>"+resultado,Toast.LENGTH_SHORT).show();
+
+        persona = new PersonasView().newInstance(personas);
+        FragmentTransaction transtion=getActivity().getSupportFragmentManager().beginTransaction();
+        transtion.add(R.id.layout_personasView,persona);
+        transtion.commit();
+    }
+
+    public  void LlamadoActivity(){
+        Intent ir = new Intent(getActivity(),Home.class);
+        startActivity(ir);
+    }
+
     public void ingresarEstudiante(String personName){
         //String prueba=f.getResources().getResourceEntryName(R.id.btnExecuteBD);
         String estudiante ="insert into personas (nombre) values ('"+personName+"');";
@@ -127,6 +164,8 @@ public class FragSPA extends Fragment {
         edName = (EditText) view.findViewById(R.id.edName);
         btnInsert = (Button) view.findViewById(R.id.bntInsertar);
         btnViewOptions = (Button) view.findViewById(R.id.btnViewOptions);
+        btnSearch = (Button) view.findViewById(R.id.btnSearch);
+        btnIrA = (Button) view.findViewById(R.id.btnLlamadoA);
 
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +181,8 @@ public class FragSPA extends Fragment {
                 btnInsert.setVisibility(View.VISIBLE);
             }
         });
+        btnSearch.setOnClickListener(this);
+        btnIrA.setOnClickListener(this);
 
         // TODO Adjust layout params of inflated view here
 
@@ -170,6 +211,20 @@ public class FragSPA extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnSearch:
+                seleccionarEstudiantes();
+                break;
+            case R.id.btnLlamadoA:
+                LlamadoActivity();
+                break;
+            default:
+                break;
+        }
     }
 
     /**
