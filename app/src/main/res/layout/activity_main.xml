@@ -29,6 +29,14 @@
             android:text="Iniciar frag"
             android:layout_gravity="center"
             android:fontFamily="cursive"
-            android:onClick="iniciarFrag" />
+            android:onClick="iniciarFragV" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
