@@ -15,6 +15,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.yourwelcome.Conexion.Conexion;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.IOException;
 
@@ -34,6 +38,12 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         myToolbar.setTitle("Proyecto móviles");
         //myToolbar.hideOverflowMenu();
         setSupportActionBar(myToolbar);
+
+        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+        //MobileAds.initialize(this, "ca-app-pub-5880552622720589~9469420518");
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 
