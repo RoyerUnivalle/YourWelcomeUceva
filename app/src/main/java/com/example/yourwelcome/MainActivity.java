@@ -2,6 +2,7 @@ package com.example.yourwelcome;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -148,9 +150,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void alertaPersonalizada(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_signin, null));
+        builder.create().show();
+    }
 
     private void handleSignInResult(GoogleSignInResult result ) {
         if(result.isSuccess()){
+            //alertaPersonalizada();
             iniciarFrag();
         }else{
             Toast.makeText(this,"Error",Toast.LENGTH_LONG).show();

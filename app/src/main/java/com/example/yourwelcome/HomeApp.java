@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.yourwelcome.Conexion.Conexion;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -22,10 +23,11 @@ import com.google.android.gms.ads.MobileAds;
 
 import java.io.IOException;
 
-public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener, PersonasView.OnFragmentInteractionListener{
+public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInteractionListener, PersonasView.OnFragmentInteractionListener {
 
     FragSPA fr2;
     FragmentManager fragmentManager;
+    HttpExample fr3;
 
     EditText edNombreEstudiante;
 
@@ -45,6 +47,9 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        mAdView.setAdListener(new AdListener(){
+
+        });
     }
 
     public void mostrarDatabaseOption(){
@@ -58,9 +63,20 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         }
     }
 
+    public  void ejemplosHttp(){
+        if(fr3 instanceof HttpExample){
+
+        }else{
+            fr3 = new HttpExample();
+            FragmentTransaction transtion=getSupportFragmentManager().beginTransaction();
+            transtion.add(R.id.layout_frag,fr3);
+            transtion.commit();
+        }
+    }
+
 
     public void VolverFrag(View f){
-        Toast.makeText(this,"hola",Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"hola",Toast.LENGTH_LONG).show();
         FragmentTransaction transtionHideen=getSupportFragmentManager().beginTransaction();
         if (fr2.isAdded()) {
             transtionHideen.hide(fr2);
@@ -109,7 +125,8 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
                 return true;
 
             case R.id.action_network:
-                Toast.makeText(this,"hola "+item.getTitle(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(this,"hola "+item.getTitle(),Toast.LENGTH_LONG).show();
+                ejemplosHttp();
                 return true;
 
             default:
