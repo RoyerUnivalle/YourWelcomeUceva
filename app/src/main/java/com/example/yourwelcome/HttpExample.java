@@ -30,12 +30,14 @@ import java.net.URL;
 public class HttpExample extends Fragment implements View.OnClickListener{
 
     View rootView;
-    Button btnTestFeed,btnInsertar,btnVolver;
+    Button btnTestFeed,btnInsertar,btnVolver,btnConsultarPorId;
     ProbarFeed test;
     RegistrarEstudiante insert;
     EditText resultadoFeed,Ednombre,Eddireccion;
     String URLConnect="http://ep00.epimg.net/rss/elpais/portada_america.xml";
-    String URLConnectCreate="http://www.programa2.net/univalle/insertar_alumno.php";
+    String URL_BASE="http://www.programa2.net/univalle/";
+    String insertarAlumno=URL_BASE+"insertar_alumno.php";
+    String consultarAlumnoPorId=URL_BASE+"obtener_alumno_por_id.php";
 
     public HttpExample() {
         // Required empty public constructor
@@ -51,6 +53,7 @@ public class HttpExample extends Fragment implements View.OnClickListener{
         btnTestFeed = (Button) rootView.findViewById(R.id.btnTestFeed);
         btnInsertar = (Button) rootView.findViewById(R.id.btnRegistrarEstudiante);
         btnVolver = (Button) rootView.findViewById(R.id.bntCerrarHttp);
+        btnConsultarPorId = (Button) rootView.findViewById(R.id.btnConsultarEstudiantePorId);
 
         resultadoFeed = (EditText) rootView.findViewById(R.id.edResultadoFeed);
         Ednombre = (EditText) rootView.findViewById(R.id.edName);
@@ -59,6 +62,7 @@ public class HttpExample extends Fragment implements View.OnClickListener{
         btnTestFeed.setOnClickListener(this);
         btnVolver.setOnClickListener(this);
         btnInsertar.setOnClickListener(this);
+        btnConsultarPorId.setOnClickListener(this);
         return  rootView;
     }
 
@@ -66,10 +70,17 @@ public class HttpExample extends Fragment implements View.OnClickListener{
         test = new ProbarFeed();
         test.execute();
     }
-    public void ejecutarPeticionEstudiante(){
+    /*
+    integer opcion
+    1:insertar
+    2:consultar por id
+    3:eliminar estudiante
+    4:consultar todos
+     */
+    public void ejecutarPeticionEstudiante(Integer opcion){
         //Toast.makeText(getActivity(),"test",Toast.LENGTH_SHORT).show();
         insert = new RegistrarEstudiante();
-        insert.execute();
+        insert.execute(opcion);
     }
 
     @Override
@@ -79,9 +90,12 @@ public class HttpExample extends Fragment implements View.OnClickListener{
                 ejecutarPeticionFeed();
                 break;
             case R.id.btnRegistrarEstudiante:
-                ejecutarPeticionEstudiante();
+                ejecutarPeticionEstudiante(1);
                 break;
             case R.id.bntCerrarHttp:
+                break;
+            case R.id.btnConsultarEstudiantePorId:
+                ejecutarPeticionEstudiante(2);
                 break;
             default: break;
         }
@@ -132,7 +146,7 @@ public class HttpExample extends Fragment implements View.OnClickListener{
                     } //close while
                     xml.close();
                 }else{
-                    salida ="Fuente no encontrada";
+                    salida ="401 Unauthorized";
                 }
                 conexion.disconnect();
                 return  salida;
@@ -162,10 +176,11 @@ public class HttpExample extends Fragment implements View.OnClickListener{
 
     //http://www.evanjbrunner.info/posts/json-requests-with-httpurlconnection-in-android/
     //https://stackoverflow.com/questions/13911993/sending-a-json-http-post-request-from-android
-    public class RegistrarEstudiante extends AsyncTask<Void,String,Void>{
+    public class RegistrarEstudiante extends AsyncTask<Integer,String,Void>{
 
         String nombre="";
         String direccion="";
+        Integer opcion=0;
 
         @Override
         protected void onPreExecute() {
@@ -175,55 +190,87 @@ public class HttpExample extends Fragment implements View.OnClickListener{
         }
 
         @Override
-        protected Void doInBackground(Void... integers) {
+        protected Void doInBackground(Integer... integers) {
             try{
-            URL urlConexion = new URL(URLConnectCreate);
                 StringBuilder sb = new StringBuilder();
-                //String resultado="";
-            //primer paso segun https://developer.android.com/reference/java/net/HttpURLConnection.html
-            HttpURLConnection urlConnection = (HttpURLConnection) urlConexion.openConnection();
-            //segundo paso -headers
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setUseCaches(false);
-                urlConnection.setConnectTimeout(10000);
-                urlConnection.setReadTimeout(10000);
+                opcion=integers[0];
+                URL urlConexion;;
 
-                urlConnection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-                urlConnection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+                if(opcion==1){
+                    urlConexion= new URL(insertarAlumno);
+                    //primer paso segun https://developer.android.com/reference/java/net/HttpURLConnection.html
+                    HttpURLConnection urlConnection = (HttpURLConnection) urlConexion.openConnection();
+                    //segundo paso -headers
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setUseCaches(false);
+                    urlConnection.setConnectTimeout(10000);
+                    urlConnection.setReadTimeout(10000);
 
-                //open
-                urlConnection.connect();
+                    urlConnection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+                    urlConnection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 
-                DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream ());
-                //wr.writeBytes(otherParametersUrServiceNeed);
+                    //open
+                    urlConnection.connect();
 
-            //segundo paso -headers
-                JSONObject jsonParam = new JSONObject();
-                jsonParam.put("nombre", nombre);
-                jsonParam.put("direccion", direccion);
+                    DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream ());
+                    //wr.writeBytes(otherParametersUrServiceNeed);
 
-                wr.writeBytes(jsonParam.toString());
-                wr.flush();
-                wr.close();
-            int conectado= urlConnection.getResponseCode();
-            if(conectado==HttpURLConnection.HTTP_OK){
-                BufferedReader br = new BufferedReader(new InputStreamReader(
-                        urlConnection.getInputStream(),"utf-8"));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    //resultado = resultado +  resultadoFeed.toString();
-                    sb.append(line + "\n");
+                    //segundo paso -headers
+                    JSONObject jsonParam = new JSONObject();
+                    jsonParam.put("nombre", nombre);
+                    jsonParam.put("direccion", direccion);
+
+                    wr.writeBytes(jsonParam.toString());
+                    wr.flush();
+                    wr.close();
+
+                    int conectado= urlConnection.getResponseCode();
+                    if(conectado==HttpURLConnection.HTTP_OK){
+                        BufferedReader br = new BufferedReader(new InputStreamReader(
+                                urlConnection.getInputStream(),"utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            //resultado = resultado +  resultadoFeed.toString();
+                            sb.append(line + "\n");
+                        }
+                        br.close();
+                        publishProgress(sb.toString());
+                        System.out.println(""+sb.toString());
+
+                    }else{
+                        System.out.println(urlConnection.getResponseMessage());
+                    }
+                    urlConnection.disconnect();
+                }else if(opcion==2){
+                    urlConexion= new URL(consultarAlumnoPorId+"?idalumno=42");
+                    HttpURLConnection urlConnection = (HttpURLConnection) urlConexion.openConnection();
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.setUseCaches(false);
+                    urlConnection.setConnectTimeout(10000);
+                    urlConnection.setReadTimeout(10000);
+                    //open
+                    urlConnection.connect();
+                    int conectado= urlConnection.getResponseCode();
+                    if(conectado==HttpURLConnection.HTTP_OK){
+                        BufferedReader br = new BufferedReader(new InputStreamReader(
+                                urlConnection.getInputStream(),"utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            //resultado = resultado +  resultadoFeed.toString();
+                            sb.append(line + "\n");
+                        }
+                        br.close();
+                        publishProgress(sb.toString());
+                        System.out.println("opcion2:_"+sb.toString()+" "+consultarAlumnoPorId+"?idalumno=42");
+                    }else{
+                        System.out.println(urlConnection.getResponseMessage());
+                    }
+                    urlConnection.disconnect();
                 }
-                br.close();
-                publishProgress(sb.toString());
-                System.out.println(""+sb.toString());
-
-            }else{
-                System.out.println(urlConnection.getResponseMessage());
-            }
-            urlConnection.disconnect();
         }catch (MalformedURLException e){
                 e.printStackTrace();
             }catch (IOException e){

@@ -56,6 +56,12 @@
             android:layout_weight="1"
             android:text="InsertarEstudiante" />
         <Button
+            android:id="@+id/btnConsultarEstudiantePorId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Consultar estudiante por ID" />
+        <Button
             android:id="@+id/bntCerrarHttp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
