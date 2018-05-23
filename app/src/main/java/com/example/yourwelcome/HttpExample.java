@@ -3,6 +3,7 @@ package com.example.yourwelcome;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,14 +39,24 @@ public class HttpExample extends Fragment implements View.OnClickListener{
     RegistrarEstudiante insert;
     EditText resultadoFeed,Ednombre,Eddireccion;
     String URLConnect="http://ep00.epimg.net/rss/elpais/portada_america.xml";
+
     String URL_BASE="http://www.programa2.net/univalle/";
     String insertarAlumno=URL_BASE+"insertar_alumno.php";
     String consultarAlumnoPorId=URL_BASE+"obtener_alumno_por_id.php";
+
+    // Write a message to the database
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
 
     public HttpExample() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        myRef.setValue("Hello, World!");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,6 +139,7 @@ public class HttpExample extends Fragment implements View.OnClickListener{
                 if(conectado==HttpURLConnection.HTTP_OK){//NOS CONECTAMOS
                     BufferedReader xml = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
                     String linea = xml.readLine(); // leemos la primera linea del xml que contiene datos de la fuente
+                    int k=0;
                     while (linea!=null || linea!=""){
                         if(!isCancelled()){ //SI NO HA SIDO DETENIDA LA TASK pues entonces siga con la iteración
                             //procesar el contenido de xml
@@ -134,7 +149,7 @@ public class HttpExample extends Fragment implements View.OnClickListener{
 
                                 salida  = linea.substring(i,j);
                                 salida += "\n";
-
+                                EscribirFirebase(k,salida);
                                 publishProgress(salida);
                                 Thread.sleep(800);//2 segundo entre cada iteración
                             }
@@ -143,6 +158,7 @@ public class HttpExample extends Fragment implements View.OnClickListener{
                         }else{ //close -> else isCancelled
                             break;
                         }
+                        k++;
                     } //close while
                     xml.close();
                 }else{
@@ -171,6 +187,10 @@ public class HttpExample extends Fragment implements View.OnClickListener{
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             resultadoFeed.append("\nterminó");
+        }
+
+        public void EscribirFirebase(Integer id, String vale){
+            myRef.child("feeds").child(""+id).setValue(vale);
         }
     }
 
