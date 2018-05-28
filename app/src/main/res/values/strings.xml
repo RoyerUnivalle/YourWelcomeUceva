@@ -8,5 +8,7 @@
     <string name="network">Network</string>
     <string name="data_base">Data Base</string>
 
+    <string name="google_maps_api">AIzaSyBfSRGegPE0B_2ANlp_DbDH6iYsxJND3Jo</string>
+
     <string name="clientId">52252827729-ppivtpj42if5c0jhss2gdvq33vpuk5rh.apps.googleusercontent.com</string>
 </resources>

@@ -20,6 +20,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.IOException;
 
@@ -28,6 +29,7 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
     FragSPA fr2;
     FragmentManager fragmentManager;
     HttpExample fr3;
+    GoogleMapExample fr4;
 
     EditText edNombreEstudiante;
 
@@ -73,6 +75,16 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
             transtion.commit();
         }
     }
+    public  void ejemplosMaps(){
+        if(fr4 instanceof GoogleMapExample){
+
+        }else{
+            fr4 = new GoogleMapExample();
+            FragmentTransaction transtion=getSupportFragmentManager().beginTransaction();
+            transtion.add(R.id.layout_frag,fr4);
+            transtion.commit();
+        }
+    }
 
 
     public void VolverFrag(View f){
@@ -111,8 +123,9 @@ public class HomeApp extends AppCompatActivity implements  FragSPA.OnFragmentInt
         switch (item.getItemId()) {
             case R.id.action_back_gorund:
                 // User chose the "Settings" item, show the app settings UI...
-                item.getTitle();
-                Toast.makeText(this,"hola "+item.getTitle(),Toast.LENGTH_LONG).show();
+                //item.getTitle();
+                //Toast.makeText(this,"hola "+item.getTitle(),Toast.LENGTH_LONG).show();
+                ejemplosMaps();
                 return true;
 
             case R.id.action_data_base:

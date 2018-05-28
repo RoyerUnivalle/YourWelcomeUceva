@@ -52,6 +52,12 @@
             android:layout_height="wrap_content"
             android:onClick="IrFrag"
             android:text="Fragmento" />
+        <Button
+            android:id="@+id/BntMapa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="IrMapa"
+            android:text="Mapa" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
