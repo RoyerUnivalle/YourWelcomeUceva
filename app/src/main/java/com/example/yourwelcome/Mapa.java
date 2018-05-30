@@ -1,5 +1,6 @@
 package com.example.yourwelcome;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -15,20 +16,25 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
 
-public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
+public class Mapa extends Activity implements OnMapReadyCallback {
 
     SupportMapFragment mapFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapa);
+        MapsInitializer.initialize(this);
+        //requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
+    public void requestPermission(){
+
+    }
     @Override
     public void onMapReady(GoogleMap map) {
         LatLng sydney = new LatLng(-33.867, 151.206);

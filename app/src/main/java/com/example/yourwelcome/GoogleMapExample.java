@@ -3,11 +3,13 @@ package com.example.yourwelcome;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import android.Manifest;
 
 
 /**
@@ -30,9 +33,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GoogleMapExample extends Fragment implements OnMapReadyCallback {
 
 
+    private static final int LOCATION_REQUEST_CODE = 1;
+    private static final int ACCESS_FINE_LOCATION = 1;
     View rootView;
     SupportMapFragment mapFragment;
     MapFragment mapFragment2;
+
+    GoogleMap mapaTotal;
 
     //https://www.quora.com/How-can-I-open-map-in-map-fragment-inside-another-fragment-in-Android
     public GoogleMapExample() {
@@ -42,20 +49,41 @@ public class GoogleMapExample extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        MapsInitializer.initialize(this.getActivity());
+        requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_REQUEST_CODE);
+        mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment==null){
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             mapFragment = SupportMapFragment.newInstance();
             ft.replace(R.id.map,mapFragment).commit();
         }
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         mapFragment.getMapAsync(this);
     }
+    protected void requestPermission(String permissionType, int
+            requestCode) {
+        int permission = ContextCompat.checkSelfPermission(getContext(), permissionType);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{permissionType}, requestCode
+            );
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case LOCATION_REQUEST_CODE: {
+                if (grantResults.length == 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(getContext(),"no permiso",Toast.LENGTH_SHORT).show();
+                } return;
+            }
+        }
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,7 +100,9 @@ public class GoogleMapExample extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng sydney = new LatLng(-33.867, 151.206);
+        LatLng tuluaUceva = new LatLng(4.062975, -76.198423);
+
+        this.mapaTotal=map;
 
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -84,19 +114,32 @@ public class GoogleMapExample extends Fragment implements OnMapReadyCallback {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-            map.setMyLocationEnabled(true);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 17));
-            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        mapaTotal.setMyLocationEnabled(true);
+        mapaTotal.moveCamera(CameraUpdateFactory.newLatLngZoom(tuluaUceva, 10));
+        mapaTotal.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng point) {
                     Toast.makeText(getContext(),
                             point.latitude + ", " + point.longitude,
                             Toast.LENGTH_SHORT).show();
+                    anadirMarca(point.latitude,point.longitude);
                 }
             });
-            map.addMarker(new MarkerOptions()
+        mapaTotal.addMarker(new MarkerOptions()
                     .title("Sydney")
+                    //.icon(R.drawable.agenda)
                     .snippet("The most populous city in Australia.")
-                    .position(sydney));
+                    .position(tuluaUceva));
+    }
+
+    public void anadirMarca(double lat, double lon){
+        LatLng punto = new LatLng(lat, lon);
+        Toast.makeText(getContext(),
+                lat + ", " + lon,
+                Toast.LENGTH_SHORT).show();
+        mapaTotal.addMarker(new MarkerOptions()
+                .title("pendiente")
+                .snippet("hola.")
+                .position(punto));
     }
 }
