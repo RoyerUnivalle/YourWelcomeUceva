@@ -2,6 +2,7 @@ package com.example.yourwelcome;
 
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +25,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+
 import android.Manifest;
+
+import java.sql.Array;
+import java.util.ArrayList;
 
 
 /**
@@ -141,5 +148,14 @@ public class GoogleMapExample extends Fragment implements OnMapReadyCallback {
                 .title("pendiente")
                 .snippet("hola.")
                 .position(punto));
+        /*PolygonOptions options = new PolygonOptions();
+        LatLng punto1 = new LatLng(lat, lon);
+        LatLng punto2 = new LatLng(lat, lon);
+        ArrayList<LatLng> puntos = new ArrayList<LatLng>();
+        puntos.add(punto1);
+        puntos.add(punto2);
+        options.add(punto1);
+        mapaTotal.addPolyline(options);*/
+
     }
 }
